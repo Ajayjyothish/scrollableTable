@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:report_rapidor/components/empty_cell.dart';
+import 'package:report_rapidor/constants/styles.dart';
 import 'dart:math';
 
 void main() {
@@ -46,7 +48,7 @@ class _FitnessReportState extends State<FitnessReport> {
   @override
   void initState() {
     super.initState();
-    getPreviousSundays();
+    getDaysSinceSunday();
     generateExerciseList();
     _rowScrollController.addListener(() {
       if (_rowScrollController.position.pixels != _columnScrollController.position.pixels) {
@@ -102,34 +104,24 @@ class _FitnessReportState extends State<FitnessReport> {
     };
   }
 
-  void getPreviousSundays() {
-    List<String> previousSundays = [];
+  void getDaysSinceSunday() {
+    List<String> listOfDays = [];
     DateFormat df = DateFormat("dd/yy/mm");
     DateTime now = DateTime.now();
     DateTime mostRecentSunday = now.subtract(Duration(days: now.weekday));
 
     while (mostRecentSunday.isBefore(now)) {
-      previousSundays.add(df.format(mostRecentSunday));
+      listOfDays.add(df.format(mostRecentSunday));
       mostRecentSunday = mostRecentSunday.add(const Duration(days: 1));
     }
-    previousSundays.add(df.format(now));
+    listOfDays.add(df.format(now));
     setState(() {
-      dates = previousSundays;
+      dates = listOfDays;
     });
   }
 
   final daysOfweek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   final infoList = ["Running Time", "Jogging Time", "Exercise Time", "Total Time (Running+Jogging+Exercise)", "Running Time engagement % (Running / Total Time)", "Jogging Time engagement % (Jogging / Total Time)", "Exercise Time engagement % (Exercise / Total Time)"];
-
-  renderEmptyCell(double height, double width) {
-    return Container(
-      alignment: Alignment.center,
-      height: height,
-      width: width,
-      margin: const EdgeInsets.all(4.0),
-      child: const Text("", style: TextStyle(fontSize: 15)),
-    );
-  }
 
   List<Widget> _renderDateCells(List items, {double height = _cellHeight, double width = _cellWidth}) {
     return List.generate(
@@ -151,7 +143,7 @@ class _FitnessReportState extends State<FitnessReport> {
                   margin: const EdgeInsets.all(4.0),
                   child: Text(dates[index], style: const TextStyle(fontSize: 15)),
                 )
-              : renderEmptyCell(height, width)
+              : EmptyCell(height: height, width: width)
         ],
       ),
     );
@@ -170,7 +162,7 @@ class _FitnessReportState extends State<FitnessReport> {
             margin: const EdgeInsets.all(4.0),
             child: Text("${items[index]}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
           ),
-          renderEmptyCell(height, width)
+          EmptyCell(height: height, width: width)
         ],
       ),
     );
@@ -206,12 +198,12 @@ class _FitnessReportState extends State<FitnessReport> {
         (index) => index < exerciseList.length
             ? Container(
                 alignment: Alignment.center,
-                width: 120.0,
-                height: 50.0,
+                width: width,
+                height: height,
                 margin: const EdgeInsets.all(4.0),
                 child: Text("${exerciseList[index].values.elementAt(rowIndex)}", style: const TextStyle(fontSize: 15)),
               )
-            : renderEmptyCell(height, width));
+            : EmptyCell(height: height, width: width));
   }
 
   List<Widget> _buildRows(int rowcount) {
@@ -233,19 +225,6 @@ class _FitnessReportState extends State<FitnessReport> {
       ),
     );
   }
-
-  static const purpleBoxDecoration = BoxDecoration(
-    borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
-    gradient: LinearGradient(
-      colors: [Colors.purple, Colors.deepPurple],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
-  );
-
-  static const roundedBoxDecoration = BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(10)),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +272,6 @@ class _FitnessReportState extends State<FitnessReport> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                      // margin: const EdgeInsets.all(8),
                       decoration: lightPurpleBoxDecoration(),
                       clipBehavior: Clip.antiAlias,
                       child: Row(children: [
@@ -311,7 +289,6 @@ class _FitnessReportState extends State<FitnessReport> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                            // margin: const EdgeInsets.only(left: 8),
                             decoration: lightPurpleBoxDecoration(const BorderRadius.only(bottomLeft: Radius.circular(8))),
                             clipBehavior: Clip.antiAlias,
                             child: Column(
