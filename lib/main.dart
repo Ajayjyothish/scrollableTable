@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Fitness Report',
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyText1: TextStyle(color: Colors.white),
@@ -22,20 +22,20 @@ class MyApp extends StatelessWidget {
         ),
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const FitnessReport(title: 'Fitness Report'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class FitnessReport extends StatefulWidget {
+  const FitnessReport({super.key, required this.title});
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<FitnessReport> createState() => _FitnessReportState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _FitnessReportState extends State<FitnessReport> {
   final _columnScrollController = ScrollController();
   final _rowScrollController = ScrollController();
   static const _cellWidth = 120.0;
@@ -126,7 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
       alignment: Alignment.center,
       height: height,
       width: width,
-      // color: Colors.white,
       margin: const EdgeInsets.all(4.0),
       child: const Text("", style: TextStyle(fontSize: 15)),
     );
@@ -141,7 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
             alignment: Alignment.center,
             width: width,
             height: height,
-            // color: Colors.white,
             margin: const EdgeInsets.all(4.0),
             child: Text("${items[index]}", style: const TextStyle(fontSize: 15)),
           ),
@@ -150,7 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   alignment: Alignment.center,
                   height: height,
                   width: width,
-                  // color: Colors.white,
                   margin: const EdgeInsets.all(4.0),
                   child: Text(dates[index], style: const TextStyle(fontSize: 15)),
                 )
@@ -166,12 +163,12 @@ class _MyHomePageState extends State<MyHomePage> {
       (index) => Column(
         children: [
           Container(
+            padding: const EdgeInsets.only(left: 8),
             alignment: Alignment.center,
             width: width,
             height: height,
-            // color: Colors.white,
             margin: const EdgeInsets.all(4.0),
-            child: Text("${items[index]}", style: const TextStyle(fontSize: 15)),
+            child: Text("${items[index]}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
           ),
           renderEmptyCell(height, width)
         ],
@@ -185,11 +182,12 @@ class _MyHomePageState extends State<MyHomePage> {
       items.length,
       (index) => Row(children: [
         Container(
-          alignment: Alignment.center,
+          padding: const EdgeInsets.only(left: 8),
+          alignment: Alignment.centerLeft,
           height: height,
-          width: width,
+          width: width + 30,
           margin: const EdgeInsets.all(4.0),
-          child: LayoutBuilder(builder: (p0, p1) => Text("${items[index]}", style: TextStyle(fontSize: p1.maxHeight * 0.2))),
+          child: LayoutBuilder(builder: (p0, p1) => Text("${items[index]}", style: TextStyle(fontSize: p1.maxHeight * 0.25, fontWeight: FontWeight.bold))),
         ),
         Container(
           alignment: Alignment.center,
@@ -202,17 +200,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  List<Widget> _buildCells(int rowIndex) {
+  List<Widget> _buildCells(int rowIndex, {double height = _cellHeight, double width = _cellWidth}) {
     return List.generate(
-      exerciseList.length,
-      (index) => Container(
-        alignment: Alignment.center,
-        width: 120.0,
-        height: 50.0,
-        margin: const EdgeInsets.all(4.0),
-        child: Text("${exerciseList[index].values.elementAt(rowIndex)}", style: const TextStyle(fontSize: 15)),
-      ),
-    );
+        daysOfweek.length,
+        (index) => index < exerciseList.length
+            ? Container(
+                alignment: Alignment.center,
+                width: 120.0,
+                height: 50.0,
+                margin: const EdgeInsets.all(4.0),
+                child: Text("${exerciseList[index].values.elementAt(rowIndex)}", style: const TextStyle(fontSize: 15)),
+              )
+            : renderEmptyCell(height, width));
   }
 
   List<Widget> _buildRows(int rowcount) {
@@ -224,21 +223,28 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  BoxDecoration lightPurpleBoxDecoration([BorderRadius? border]) {
+    return BoxDecoration(
+      borderRadius: border,
+      gradient: const LinearGradient(
+        colors: [Color.fromARGB(255, 184, 95, 200), Color.fromARGB(255, 132, 100, 186)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    );
+  }
+
   static const purpleBoxDecoration = BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderRadius: BorderRadius.only(bottomRight: Radius.circular(8)),
     gradient: LinearGradient(
       colors: [Colors.purple, Colors.deepPurple],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
   );
-  static const yellowBoxDecoration = BoxDecoration(
+
+  static const roundedBoxDecoration = BoxDecoration(
     borderRadius: BorderRadius.all(Radius.circular(10)),
-    gradient: LinearGradient(
-      colors: [Colors.yellow, Colors.deepOrange],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
   );
 
   @override
@@ -281,46 +287,52 @@ class _MyHomePageState extends State<MyHomePage> {
           }
           return Container(
               margin: const EdgeInsets.all(8),
-              // height: 400,
-              decoration: purpleBoxDecoration,
+              decoration: roundedBoxDecoration,
               clipBehavior: Clip.antiAlias,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(children: [
-                    Row(
-                      children: [
-                        ..._renderRowCells(["Total Info for the week"]),
-                        ..._renderRowCells(["Total (Sun-Sat)"])
-                      ],
-                    ),
-                    Expanded(child: SingleChildScrollView(controller: _columnScrollController, scrollDirection: Axis.horizontal, child: Row(children: _renderDateCells(daysOfweek))))
-                  ]),
+                  Container(
+                      // margin: const EdgeInsets.all(8),
+                      decoration: lightPurpleBoxDecoration(),
+                      clipBehavior: Clip.antiAlias,
+                      child: Row(children: [
+                        Row(
+                          children: [
+                            ..._renderRowCells(["Total Info for the week"], width: 150),
+                            ..._renderRowCells(["Total (Sun-Sat)"])
+                          ],
+                        ),
+                        Expanded(child: SingleChildScrollView(controller: _columnScrollController, scrollDirection: Axis.horizontal, child: Row(children: _renderDateCells(daysOfweek))))
+                      ])),
                   Expanded(
-                      child: ListView(shrinkWrap: true, children: [
-                    Row(
+                      child: SingleChildScrollView(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _renderInfoCells(infoList),
-                        ),
+                        Container(
+                            // margin: const EdgeInsets.only(left: 8),
+                            decoration: lightPurpleBoxDecoration(const BorderRadius.only(bottomLeft: Radius.circular(8))),
+                            clipBehavior: Clip.antiAlias,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _renderInfoCells(infoList),
+                            )),
                         Expanded(
                             child: Container(
-                                margin: const EdgeInsets.all(8),
-                                decoration: yellowBoxDecoration,
-                                clipBehavior: Clip.antiAlias,
-                                child: SingleChildScrollView(
-                                  controller: _rowScrollController,
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: _buildRows(infoList.length),
-                                  ),
-                                )))
+                          decoration: purpleBoxDecoration,
+                          child: SingleChildScrollView(
+                            controller: _rowScrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _buildRows(infoList.length),
+                            ),
+                          ),
+                        ))
                       ],
                     ),
-                  ])),
+                  )),
                 ],
               ));
         })),
