@@ -1,16 +1,17 @@
-# report_rapidor
 
-A new Flutter project.
 
-## Getting Started
+# My Project Title
 
-This project is a starting point for a Flutter application.
+This is a brief description of my project. 
 
-A few resources to get you started if this is your first Flutter project:
+Here are three images related to my project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![Image 1](https://example.com/image1.jpg)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Image 2](https://example.com/image2.jpg)
+
+![Image 3](https://example.com/image3.jpg)
+
+## Installation
+
+Instructions for how to install and run the project can be found in the [installation guide](./installation.md).
