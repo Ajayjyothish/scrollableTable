@@ -110,7 +110,7 @@ class _FitnessReportState extends State<FitnessReport> {
     DateTime now = DateTime.now();
     DateTime mostRecentSunday = now.subtract(Duration(days: now.weekday));
 
-    while (mostRecentSunday.isBefore(now)) {
+    while (now.weekday != 7 && mostRecentSunday.isBefore(now)) {
       listOfDays.add(df.format(mostRecentSunday));
       mostRecentSunday = mostRecentSunday.add(const Duration(days: 1));
     }
