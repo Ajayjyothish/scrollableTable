@@ -1,17 +1,13 @@
+# Scrollable table with fixed header and row
 
+A Scrollable table created using flutter
 
-# My Project Title
+## UI
 
-This is a brief description of my project. 
+<img src="https://raw.githubusercontent.com/Ajayjyothish/scrollableTable/main/images/Screenshot_1682185126.png" width="100%">
 
-Here are three images related to my project:
+<div style="display:flex; justify-content:center;">
+ <img src="https://raw.githubusercontent.com/Ajayjyothish/scrollableTable/main/images/Screenshot_1682185116.png" width="33%">
 
-a href="url"><img src="https://raw.githubusercontent.com/Ajayjyothish/scrollableTable/main/images/Screenshot_1682185116.png" align="left" height="200" width="150" ></a>
-
-![Image 2](https://raw.githubusercontent.com/Ajayjyothish/scrollableTable/main/images/Screenshot_1682185120.png)
-
-![Image 3](https://raw.githubusercontent.com/Ajayjyothish/scrollableTable/main/images/Screenshot_1682185126.png)
-
-## Installation
-
-Instructions for how to install and run the project can be found in the [installation guide](./installation.md).
+<img src="https://raw.githubusercontent.com/Ajayjyothish/scrollableTable/main/images/Screenshot_1682185120.png" width="33%">
+</div>
